@@ -22,6 +22,11 @@ metadata:
       bins:
         - python3
         - openclaw
+    files:
+      - install.sh
+      - scripts/boot-resume-check.sh
+      - templates/boot-resume.conf
+      - templates/boot-resume-wake.service
 ---
 
 # Boot Resume
