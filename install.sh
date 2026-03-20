@@ -69,8 +69,27 @@ if [[ "$(uname)" == "Linux" ]]; then
     echo "✓ Deployed systemd drop-in → $SYSTEMD_DROPIN_DIR/"
   fi
 
-  # Reload systemd
+  # 2b. Deploy sleep/wake service (triggers on system resume from suspend/hibernate)
+  WAKE_SERVICE_DIR="$HOME/.config/systemd/user"
+  WAKE_SERVICE_TARGET="$WAKE_SERVICE_DIR/boot-resume-wake.service"
+
+  if [[ -f "$WAKE_SERVICE_TARGET" ]]; then
+    echo "  boot-resume-wake.service already exists."
+    read -rp "  Overwrite? [y/N] " answer
+    if [[ "${answer,,}" != "y" ]]; then
+      echo "  Skipped wake service deployment."
+    else
+      cp "$SKILL_DIR/templates/boot-resume-wake.service" "$WAKE_SERVICE_TARGET"
+      echo "✓ Updated wake service"
+    fi
+  else
+    cp "$SKILL_DIR/templates/boot-resume-wake.service" "$WAKE_SERVICE_TARGET"
+    echo "✓ Deployed wake service → $WAKE_SERVICE_DIR/"
+  fi
+
+  # Reload systemd and enable wake service
   systemctl --user daemon-reload 2>/dev/null && echo "✓ Reloaded systemd" || echo "⚠ systemctl daemon-reload failed"
+  systemctl --user enable boot-resume-wake.service 2>/dev/null && echo "✓ Enabled wake service" || echo "⚠ Could not enable wake service"
 
 elif [[ "$(uname)" == "Darwin" ]]; then
   echo ""

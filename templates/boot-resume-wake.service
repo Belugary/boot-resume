@@ -1,0 +1,11 @@
+[Unit]
+Description=boot-resume session recovery on system wake
+After=sleep.target
+BindsTo=openclaw-gateway.service
+
+[Service]
+Type=oneshot
+ExecStart=/bin/bash -c '"${OPENCLAW_STATE_DIR:-$HOME/.openclaw}/workspace/scripts/boot-resume-check.sh" >> /tmp/openclaw/boot-resume.log 2>&1'
+
+[Install]
+WantedBy=sleep.target

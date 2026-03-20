@@ -70,9 +70,10 @@ Key insight: the JSONL session files already contain all the evidence needed to 
 bash {baseDir}/install.sh
 ```
 
-Deploys two components:
+Deploys three components:
 - `boot-resume-check.sh` → `~/.openclaw/workspace/scripts/`
 - `boot-resume.conf` → systemd drop-in (triggers script on every gateway start)
+- `boot-resume-wake.service` → systemd user service (triggers script on system wake from sleep/suspend)
 
 ### Manual
 
@@ -82,8 +83,10 @@ chmod +x ~/.openclaw/workspace/scripts/boot-resume-check.sh
 
 mkdir -p ~/.config/systemd/user/openclaw-gateway.service.d
 cp {baseDir}/templates/boot-resume.conf ~/.config/systemd/user/openclaw-gateway.service.d/
+cp {baseDir}/templates/boot-resume-wake.service ~/.config/systemd/user/
 
 systemctl --user daemon-reload
+systemctl --user enable boot-resume-wake.service
 ```
 
 ## Verify
@@ -130,6 +133,7 @@ Edit at the top of `scripts/boot-resume-check.sh`.
 
 ## Features
 
+- **Dual trigger** — covers both gateway restart (ExecStartPost) and system sleep/wake (systemd sleep.target)
 - **Multi-agent support** — scans all agents under `~/.openclaw/agents/`, not just `main`
 - **Smart filtering** — skips system, heartbeat, cron, and subagent sessions automatically
 - **Deduplication** — respects `restart-resume.json` to avoid double-resuming planned restarts
@@ -163,6 +167,8 @@ Each run logs: timestamp, scan window, candidate count, per-session status, and 
 
 ```bash
 rm ~/.config/systemd/user/openclaw-gateway.service.d/boot-resume.conf
+systemctl --user disable boot-resume-wake.service 2>/dev/null
+rm ~/.config/systemd/user/boot-resume-wake.service
 systemctl --user daemon-reload
 rm ~/.openclaw/workspace/scripts/boot-resume-check.sh
 rm -rf ~/.openclaw/workspace/skills/boot-resume
