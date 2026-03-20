@@ -189,7 +189,7 @@ else:
 
     openclaw cron add \
       --name "$JOB_NAME" \
-      --session main \
+      --session "$AGENT_ID" \
       --session-key "$SESSION_KEY" \
       --at "$DELAY" \
       --system-event "The gateway just restarted. The conversation above was interrupted mid-turn. Continue fulfilling the user's last request as if no interruption occurred. Respond in the same language the user was using." \
