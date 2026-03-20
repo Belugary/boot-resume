@@ -2,7 +2,7 @@
 name: boot-resume
 description: |
   Zero-cooperation session recovery after gateway restart. No checkpoints, no hooks, no agent involvement — just reads the evidence and picks up where it left off. Use when: the gateway was killed mid-task (SIGTERM, OOM, SIGKILL, crash), sessions were interrupted mid-turn with tool calls in progress, the agent stopped responding after a restart, a user reports the agent went silent after a crash, you need to manually check whether any sessions need recovery, or you want automatic resume without writing any checkpoint logic.
-version: 1.0.0
+version: 1.1.0
 homepage: https://github.com/Belugary/boot-resume
 license: MIT
 user-invocable: true
