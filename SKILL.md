@@ -31,6 +31,9 @@ metadata:
 
 # Boot Resume
 
+> [!WARNING]
+> **Deprecated as of 2026-04-25.** OpenClaw v2026.4.22 (released 2026-04-23) introduced native warm `claude-cli` stdio sessions and automatic resume from the stored Claude session id after Gateway restarts or idle exits — see [openclaw/openclaw#69679](https://github.com/openclaw/openclaw/pull/69679). This covers the primary use case of `boot-resume`. **This repository is archived for reference.** Use the built-in behavior in OpenClaw ≥ v2026.4.22.
+
 Zero-cooperation session recovery after gateway restart. No checkpoints, no hooks, no agent involvement — just reads the evidence and picks up where it left off.
 
 ## Problem
